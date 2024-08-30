@@ -4,7 +4,7 @@
 \
 *Skills demonstrated: SQL, Excel, Python, Correlation, Data Cleaning*
 
-* [Local Winter Weather Pattern Analysis](https://github.com/rcilino/Data-Project-Portfolio/blob/main/Local%20Winter%20Weather%20Analysis.ipynb) - Using Python I visualize local weather data from NOAA to investigate my observations and hypothesis that winters in my area are becoming shorter and less harsh.
+* [Local Winter Weather Pattern Analysis](https://rawcdn.githack.com/rcilino/Data-Project-Portfolio/5434143dfb322c66b39ba0b873cc4a2c04aa9073/Local%20Winter%20Weather%20Analysis.html) - Using Python I visualize local weather data from NOAA to investigate my observations and hypothesis that winters in my area are becoming shorter and less harsh.
 \
 *Skills demonstrated: Python, Jupyter Notebook, Data Cleaning*
 
