@@ -8,6 +8,10 @@
 \
 *Skills demonstrated: Python, Jupyter Notebook, Data Cleaning*
 
+* [IBM HR Employee Data Analysis]() - This is fictional data that was analyzed to find employees characteristics that stick out as having an effect on attrition, and other interesting employee characteristics that weren't known before.
+\
+*Skills demonstrated: Python, Jupyter Notebook, Correlation, Data Cleaning*
+
 * [Undergraduate Honors Thesis in Econometrics](https://github.com/rcilino/Data-Project-Portfolio/blob/main/Econometrics_Thesis-Quantitative_Effects_of_Institution_Characteristics_on_Institution_Success.png) - Title: "Quantitative Effects of Institution Characteristics on Institution Success" - Is there any particular characteristic of higher education institutions that drives their success? I used a 2SLS regression to find an answer using IPEDS data from thousands of schools across the United States.
 \
 *Skills demonstrated: Stata, Regression, Data Visualization*
