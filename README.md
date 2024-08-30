@@ -6,7 +6,7 @@ Date Prepared: Currently in progress, to be presented November 2024
 \
 *Skills demonstrated: SQL, Excel, Python, Correlation, Data Cleaning*
 
-* [IBM HR Employee Data Analysis](https://rawcdn.githack.com/rcilino/Data-Project-Portfolio/77660ecd55d93a46dde5ae6ecebae03e6c2b1d8f/IBM_HR_Analytics.html) <br>
+* [IBM HR Employee Data Analysis](https://rawcdn.githack.com/rcilino/Data-Project-Portfolio/f65416cdd1a6945a6fd6119ed922b297db8f0896/IBM_HR_Analytics.html) <br>
 This is fictional data that was analyzed to find employees characteristics that stick out as having an effect on attrition, and other interesting employee characteristics that weren't known before.<br><br>
 Date Prepared: 2024/08/30
 \
