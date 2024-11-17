@@ -8,19 +8,19 @@ Date Prepared: 2024/11/16
 <br></br>
 [Example SQL File - First-Year Retention, no breakdown](https://drive.google.com/file/d/12bxsBVwLQeVyEtWuwmgFxeBFLO3ArvRq/view?usp=drive_link)<br>
 [Example SQL File - First-Year Retention by Gender](https://drive.google.com/file/d/1ND7jeuHFfC-Uc-RuwdCjSFIGpkSXkgeM/view?usp=drive_link)
-
+----------------------------------------------
 * [IBM HR Employee Data Analysis](https://rawcdn.githack.com/rcilino/Data-Project-Portfolio/f65416cdd1a6945a6fd6119ed922b297db8f0896/IBM_HR_Analytics.html) <br>
 This is fictional data that was analyzed to find employees characteristics that stick out as having an effect on attrition, and other interesting employee characteristics that weren't known before.<br><br>
 Date Prepared: 2024/08/30
 \
 *Skills demonstrated: Python, Jupyter Notebook, Correlation, Data Cleaning*
-
+----------------------------------------------
 * [Local Winter Weather Pattern Analysis](https://rawcdn.githack.com/rcilino/Data-Project-Portfolio/49719b2953ea8e7cc1954ae756d11c7dc3f6f44f/Local_Winter_Weather_Analysis.html) <br>
 Using Python I visualize local weather data from NOAA to investigate my observations and hypothesis that winters in my area are becoming shorter, warmer, and less snowy.<br><br>
 Date Prepared: 2024/08/29
 \
 *Skills demonstrated: Python, Jupyter Notebook, Data Cleaning*
-
+----------------------------------------------
 * [Undergraduate Honors Thesis in Econometrics](https://github.com/rcilino/Data-Project-Portfolio/blob/main/Econometrics_Thesis-Quantitative_Effects_of_Institution_Characteristics_on_Institution_Success.png) - Title: "Quantitative Effects of Institution Characteristics on Institution Success" <br>
 Is there any particular characteristic of higher education institutions that drives their success? I used a 2SLS regression to find an answer using IPEDS data from thousands of schools across the United States.<br><br>
 Date Prepared: May 2013
