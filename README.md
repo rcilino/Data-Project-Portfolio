@@ -5,7 +5,7 @@ We demonstrate a few methodologies that people at different skill levels can uti
 Date Prepared: Kaggle Dataset [IBM HR Employee Data Analysis](https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset) as an analogue for student retention data.
 \
 *Skills demonstrated: SQL, Excel, Python, Correlation, Data Cleaning*
-</br>
+
 [Example SQL File - First-Year Retention, no breakdown](https://drive.google.com/file/d/12bxsBVwLQeVyEtWuwmgFxeBFLO3ArvRq/view?usp=drive_link)
 [Example SQL File - First-Year Retention by Gender](https://drive.google.com/file/d/1ND7jeuHFfC-Uc-RuwdCjSFIGpkSXkgeM/view?usp=drive_link)
 
