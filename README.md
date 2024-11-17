@@ -6,7 +6,7 @@ Date Prepared: Kaggle Dataset [IBM HR Employee Data Analysis](https://www.kaggle
 \
 *Skills demonstrated: SQL, Excel, Python, Correlation, Data Cleaning*
 <br></br>
-[Example SQL File - First-Year Retention, no breakdown](https://drive.google.com/file/d/12bxsBVwLQeVyEtWuwmgFxeBFLO3ArvRq/view?usp=drive_link)
+[Example SQL File - First-Year Retention, no breakdown](https://drive.google.com/file/d/12bxsBVwLQeVyEtWuwmgFxeBFLO3ArvRq/view?usp=drive_link)<br>
 [Example SQL File - First-Year Retention by Gender](https://drive.google.com/file/d/1ND7jeuHFfC-Uc-RuwdCjSFIGpkSXkgeM/view?usp=drive_link)
 
 * [IBM HR Employee Data Analysis](https://rawcdn.githack.com/rcilino/Data-Project-Portfolio/f65416cdd1a6945a6fd6119ed922b297db8f0896/IBM_HR_Analytics.html) <br>
