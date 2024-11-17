@@ -2,7 +2,8 @@
 
 * [2024 NEAIR Conference Presentation](https://docs.google.com/presentation/d/1FUTr72d0P-Sh-oXsMB_os-sArVst6Txo/edit?usp=sharing&ouid=111255214258233084307&rtpof=true&sd=true) - Title: Methodologies for Determining Student Performance Risk <br>
 We demonstrate a few methodologies that people at different skill levels can utilize to determine specific student characteristics at their institution that indicate a student's risk of succeeding at that institution. We also demonstrate how we used those determined characteristics to identify students to target for intervention methods, categorizing a "risk factor" and assigning different interventions based on those higher or lower "risk factors".<br><br>
-Date Prepared: Kaggle Dataset [IBM HR Employee Data Analysis](https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset) as an analogue for student retention data.
+Date Prepared: 2024/11/16
+Kaggle Dataset [IBM HR Employee Data Analysis](https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset) as an analogue for student retention data.
 \
 *Skills demonstrated: SQL, Excel, Python, Correlation, Data Cleaning*
 <br></br>
