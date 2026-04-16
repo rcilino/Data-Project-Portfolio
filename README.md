@@ -14,14 +14,14 @@ This is fictional data that was analyzed to find employees characteristics that 
 Date Prepared: 2024/08/30
 \
 *Skills demonstrated: Python, Jupyter Notebook, Correlation, Data Cleaning*
-**Jupyter Notebook code and output displayed using [RawGit](https://raw.githack.com)
+Jupyter Notebook code and output displayed using [RawGit](https://raw.githack.com)[^1]
 ----------------------------------------------
 * [Local Winter Weather Pattern Analysis](https://rawcdn.githack.com/rcilino/Data-Project-Portfolio/49719b2953ea8e7cc1954ae756d11c7dc3f6f44f/Local_Winter_Weather_Analysis.html) <br>
 Using Python I visualize local weather data from NOAA to investigate my observations and hypothesis that winters in my area are becoming shorter, warmer, and less snowy.<br><br>
 Date Prepared: 2024/08/29
 \
 *Skills demonstrated: Python, Jupyter Notebook, Data Cleaning*
-**Jupyter Notebook code and output displayed using [RawGit](https://raw.githack.com)
+Jupyter Notebook code and output displayed using [RawGit](https://raw.githack.com)[^1]
 ----------------------------------------------
 * [Undergraduate Honors Thesis in Econometrics](https://github.com/rcilino/Data-Project-Portfolio/blob/main/Econometrics_Thesis-Quantitative_Effects_of_Institution_Characteristics_on_Institution_Success.png) - Title: "Quantitative Effects of Institution Characteristics on Institution Success" <br>
 Is there any particular characteristic of higher education institutions that drives their success? I used a 2SLS regression to find an answer using IPEDS data from thousands of schools across the United States.<br><br>
