@@ -7,21 +7,21 @@ Date Prepared: 2024/11/16
 *Skills demonstrated: SQL, Excel, Python, Correlation, Data Cleaning*
 <br></br>
 [Example SQL File - First-Year Retention, no breakdown](https://github.com/rcilino/Data-Project-Portfolio/blob/main/EXAMPLE%20SQL%20FILE%20-%20First-Year%20Retention.sql)<br>
-[Example SQL File - First-Year Retention by Gender](https://github.com/rcilino/Data-Project-Portfolio/blob/main/EXAMPLE%20SQL%20FILE%20-%20First-Year%20Retention%20by%20Gender.sql)
+[Example SQL File - First-Year Retention by Gender](https://github.com/rcilino/Data-Project-Portfolio/blob/main/EXAMPLE%20SQL%20FILE%20-%20First-Year%20Retention%20by%20Gender.sql)<br>
 ----------------------------------------------
 * [IBM HR Employee Data Analysis](https://rawcdn.githack.com/rcilino/Data-Project-Portfolio/f65416cdd1a6945a6fd6119ed922b297db8f0896/IBM_HR_Analytics.html) <br>
 This is fictional data that was analyzed to find employees characteristics that stick out as having an effect on attrition, and other interesting employee characteristics that weren't known before.<br><br>
 Date Prepared: 2024/08/30
 \
 *Skills demonstrated: Python, Jupyter Notebook, Correlation, Data Cleaning*</br>
-**Jupyter Notebook code and output displayed using [RawGit](https://raw.githack.com)*
+**Jupyter Notebook code and output displayed using [RawGit](https://raw.githack.com)*<br>
 ----------------------------------------------
 * [Local Winter Weather Pattern Analysis](https://rawcdn.githack.com/rcilino/Data-Project-Portfolio/49719b2953ea8e7cc1954ae756d11c7dc3f6f44f/Local_Winter_Weather_Analysis.html) <br>
 Using Python I visualize local weather data from NOAA to investigate my observations and hypothesis that winters in my area are becoming shorter, warmer, and less snowy.<br><br>
 Date Prepared: 2024/08/29
 \
 *Skills demonstrated: Python, Jupyter Notebook, Data Cleaning*</br>
-**Jupyter Notebook code and output displayed using [RawGit](https://raw.githack.com)*
+**Jupyter Notebook code and output displayed using [RawGit](https://raw.githack.com)*<br>
 ----------------------------------------------
 * [Sportsrecruits Export > Front Rush File Handling](https://github.com/rcilino/Data-Project-Portfolio/tree/main/Sportsrecruits%20Export%20Front%20Rush%20File%20Handling)
 Sportsrecruits can export prospective student-athlete data, this python script converts numerous columns to shorten the time needed for Front Rush to ingest the data. Sportsrecruits exports need to be placed in the "For Processing" folder to be picked up, resulting output files for Front Rush are in the "Output" folder.
@@ -33,7 +33,7 @@ Future updates:
 - Add output file name handling for Gender based on incoming file name.<br><br>
 Date Prepared: May 2026
 \
-*Skills demonstrated: Python file handling, pandas
+*Skills demonstrated: Python file handling, pandas<br>
 ----------------------------------------------
 * [Undergraduate Honors Thesis in Econometrics](https://github.com/rcilino/Data-Project-Portfolio/blob/main/Econometrics_Thesis-Quantitative_Effects_of_Institution_Characteristics_on_Institution_Success.png) - Title: "Quantitative Effects of Institution Characteristics on Institution Success" <br>
 Is there any particular characteristic of higher education institutions that drives their success? I used a 2SLS regression to find an answer using IPEDS data from thousands of schools across the United States.<br><br>
