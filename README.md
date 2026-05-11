@@ -25,7 +25,7 @@ Date Prepared: 2024/08/29
 ----------------------------------------------
 * [Sportsrecruits Export > Front Rush File Handling](https://github.com/rcilino/Data-Project-Portfolio/tree/main/Sportsrecruits%20Export%20Front%20Rush%20File%20Handling)
 Sportsrecruits can export prospective student-athlete data, this python script converts numerous columns to shorten the time needed for Front Rush to ingest the data. Sportsrecruits exports need to be placed in the "For Processing" folder to be picked up, resulting output files for Front Rush are in the "Output" folder.
-Python script and folder structure are in the linked github repository.
+Python script and folder structure are in the linked github repository.<br><br>
 Date Prepared: May 2026
 \
 *Skills demonstrated: Python file handling, pandas
