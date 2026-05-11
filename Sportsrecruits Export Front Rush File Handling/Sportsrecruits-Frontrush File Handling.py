@@ -1,3 +1,17 @@
+"""
+Sportsrecruits-Front Rush File Handling.py
+version 1.0.0
+Created by Robert Cilino
+May 2026
+
+Future updates:
+- Using a csv to create a dictionary for the dataframes to make column name changes instead of hard-coding each column change.
+- Add new columns if Sportsrecruits includes more in the future.
+- Add output file name handling for Gender based on incoming file name.
+
+Be well, do well.
+"""
+
 import sys
 import os as os
 from pathlib import Path
@@ -6,6 +20,8 @@ import csv
 import pandas as pd
 import logging
 from datetime import datetime
+
+print('Be well, do well.')
 
 # List imported modules
 modulenames = set(sys.modules) & set(globals())
