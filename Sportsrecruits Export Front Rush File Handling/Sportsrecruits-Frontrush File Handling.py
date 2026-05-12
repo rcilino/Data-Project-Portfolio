@@ -20,6 +20,7 @@ import csv
 import pandas as pd
 import logging
 from datetime import datetime
+import gc
 
 # List imported modules
 modulenames = set(sys.modules) & set(globals())
@@ -30,19 +31,49 @@ print(f'Modules imported: {modulenames}')
 try:
     dataframes.clear()
     print(dataframes)
+    gc.collect() # Memory garbage collection
     print('List "dataframes" cleared')
-
+#    logging.info('List "dataframes" cleared')
 except NameError: 
     print('No list "dataframes" exists, moving on.')
+#    logging.info('No list "dataframes" exists')
+
+try:
+    del df_combined # Delete dataframe
+    cg.collect() # Memory garbage collection
+    print('df_combined cleared')
+except NameError:
+    print('No dataframe "df_combined" exists, moving on.')
+
+# Use for testing
+# List files in directory
+#print('Our subdirectories are:')
+#p = Path('./')
+#for subdir in p.iterdir():
+#    if subdir.is_dir():
+#        print(subdir)
+
+# ^Use for testing
 
 # Specify where files from Sportsrecruits will live for processing
 processing_source_path = r'For Processing-Sportsrecruits Exports/'
 processed_dest_path = r'For Processing-Sportsrecruits Exports/Completed Processing/'
 
+# List files in directory. listdir counts subdirectories as well, that's why the test is > 1
+if len(os.listdir(processing_source_path)) > 1:
+     print('The un-converted Sportsrecruits exports available are:')
+     for file_path in os.scandir(processing_source_path):
+        print(file_path.name)
+else:
+     print('No Sportsrecruits export files were found.')
+
 # Create list "dataframes", if exists clears list "dataframes"
 dataframes = []
 
-# Gather list of CSVs from directory
+# Create empty dataframe to be filled as each row is edited in the dataframes 'df' that are in the list 'dataframes'
+df_combined = pd.DataFrame()
+
+# Gather list of CSVs from directory and load CSV data into dataframes df
 try:
     for filename in os.listdir(processing_source_path):
         if filename.endswith(".csv"):
@@ -58,14 +89,15 @@ try:
             if not fnmatch.fnmatch(filename,'* Men*'):
                 Gender = 'NoGender'
             Coach = df['Followed By Coach'].iloc[0]
-            dataframes.append(df)
+            dataframes.append(df) #
     print('Files loaded successfully.')
 except:
     print('Files not loaded successfully.')
     raise KeyboardInterrupt
 
-# Create empty dataframe to be filled as each row is edited in the dataframes 'df' that are in the list 'dataframes'
-df_combined = pd.DataFrame()
+# Use for testing
+#print(df.attrs)
+#print(df.info())
 
 # Process Sportsrecruits export file data to match Front Rush expectations
 for df in dataframes:
@@ -78,7 +110,6 @@ for df in dataframes:
 
     # Format Phone columns, shorten and remove leading +1 from phone numbers if exist
     df['Phone'] = df['Phone'].str.replace(r'1(.{11,})', r'\1', regex=True)
-
     # Copy Phone, rename both columns for Cell Phone Number and Contact Number
     df['Contact Number :: General'] = df['Phone']
     df.rename({'Phone': 'Cell Phone Number :: General'}, axis=1, inplace=True)
@@ -137,6 +168,17 @@ for df in dataframes:
 
     # Add all rows in dataframes in List "dataframes" to df_combined which does not exist in a list
     df_combined = pd.concat([df_combined, df], ignore_index=True)
+
+# Remove rows from past years. 
+df_combined = df_combined[df_combined['Class Year :: General'] >= int(datetime.now().year)]
+# It doesn't handle current year but we can delete those at a later date.
+# It also means that the Front Rush import may include duplicates.
+# Front Rush imports match for duplicate entries, this is based on name and contact information, so if any of that changed a duplicate record will be created.
+# If that has not changed then the file upload to Front Rush will update those records.
+
+# Use for testing
+#df_combined.info()
+#display(df_combined)
 
 # Export to CSV, removing <NA> and NaN values using na_rep='', and also removing the first column showing line/row number using index=False
 output_File = str('Output-FrontRush Import Files/Front Rush Import--' + Coach + '--' + datetime.now().strftime("%Y%m%d-%H.%M.%S") + '.csv')
