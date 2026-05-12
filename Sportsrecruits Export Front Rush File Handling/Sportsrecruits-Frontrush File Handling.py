@@ -1,6 +1,6 @@
 """
 Sportsrecruits-Front Rush File Handling.py
-version 1.0.0
+version 1.1.0
 Created by Robert Cilino
 May 2026
 
@@ -21,8 +21,6 @@ import pandas as pd
 import logging
 from datetime import datetime
 
-print('Be well, do well.')
-
 # List imported modules
 modulenames = set(sys.modules) & set(globals())
 allmodules = [sys.modules[name] for name in modulenames]
@@ -33,47 +31,41 @@ try:
     dataframes.clear()
     print(dataframes)
     print('List "dataframes" cleared')
+
 except NameError: 
-    print('No list "dataframes" exists')
+    print('No list "dataframes" exists, moving on.')
 
-# List files in directory
-print('Our subdirectories are:')
-p = Path('./')
-for subdir in p.iterdir():
-    if subdir.is_dir():
-        print(subdir)
-
-print('The un-converted exports available are:')
-for file_path in os.scandir('Sportsrecruits Exports/'):
-    if file_path.is_file():
-        print(file_path.name)
-        
 # Specify where files from Sportsrecruits will live for processing
-exports_folder_path = r'For Processing-Sportsrecruits Exports/'
+processing_source_path = r'For Processing-Sportsrecruits Exports/'
+processed_dest_path = r'For Processing-Sportsrecruits Exports/Completed Processing/'
 
 # Create list "dataframes", if exists clears list "dataframes"
 dataframes = []
 
 # Gather list of CSVs from directory
-for filename in os.listdir(exports_folder_path):
-    if filename.endswith(".csv"):
-        file_path = os.path.join(exports_folder_path, filename)
-        df = pd.read_csv(file_path)
-        # Passthrough Gender from file name into new column
-        if fnmatch.fnmatch(filename, '*Women*'):
-             df['Gender :: General'] = 'Female'
-            Gender = 'Female'
-        if fnmatch.fnmatch(filename, '* Men*'):
-             df['Gender :: General'] = 'Male'
-            Gender = 'Male'
-        if not fnmatch.fnmatch(filename,'* Men*'):
-            Gender = 'NoGender'
-        Coach = df['Followed By Coach'].iloc[0]
-        dataframes.append(df)
+try:
+    for filename in os.listdir(processing_source_path):
+        if filename.endswith(".csv"):
+            source_path = os.path.join(processing_source_path, filename)
+            df = pd.read_csv(source_path)
+            # Passthrough Gender from file name into new column
+            if fnmatch.fnmatch(filename, '*Women*'):
+                df['Gender :: General'] = 'Female'
+                Gender = 'Female'
+            if fnmatch.fnmatch(filename, '* Men*'):
+                df['Gender :: General'] = 'Male'
+                Gender = 'Male'
+            if not fnmatch.fnmatch(filename,'* Men*'):
+                Gender = 'NoGender'
+            Coach = df['Followed By Coach'].iloc[0]
+            dataframes.append(df)
+    print('Files loaded successfully.')
+except:
+    print('Files not loaded successfully.')
+    raise KeyboardInterrupt
 
 # Create empty dataframe to be filled as each row is edited in the dataframes 'df' that are in the list 'dataframes'
 df_combined = pd.DataFrame()
-print(output_File)
 
 # Process Sportsrecruits export file data to match Front Rush expectations
 for df in dataframes:
@@ -145,15 +137,32 @@ for df in dataframes:
 
     # Add all rows in dataframes in List "dataframes" to df_combined which does not exist in a list
     df_combined = pd.concat([df_combined, df], ignore_index=True)
-    
+
 # Export to CSV, removing <NA> and NaN values using na_rep='', and also removing the first column showing line/row number using index=False
 output_File = str('Output-FrontRush Import Files/Front Rush Import--' + Coach + '--' + datetime.now().strftime("%Y%m%d-%H.%M.%S") + '.csv')
 
 try:
+    # Export file to Output folder
     df_combined.to_csv(output_File, sep=',', na_rep='', index=False)
-    print('File Exported, check output folder')
-    print('You will need to make edits to incorrectly spelled School names, or remove data from that column before sending to Front Rush, manually adding school information to Front Rush')
+    print('File Exported, check output folder.')
+    print('You will need to make edits to incorrectly spelled School names, or remove data from that column before sending to Front Rush, manually adding school information to Front Rush.')
+    try:
+        # find files in folder
+        for filename in os.listdir(processing_source_path):
+            source_path = os.path.join(processing_source_path, filename)
+            dest_path = os.path.join(processed_dest_path, 'processed-'+filename) # Adds "processed" to name for files to be moved
+            if filename.endswith(".csv"):
+                try:
+                    # Move file
+                    os.rename(source_path, dest_path)
+                    print('Processed Sportsrecruits files moved to /For Processing-Sportsrecruits Exports/Completed Exports.')
+                except: 
+                    print('Processed file move failed.')
+                    raise KeyboardInterrupt
+    except: 
+        print('Issue reading processed files for move, NOT moving the files.')
+        raise KeyboardInterrupt
 except:
-    print('Issue exporting file')
+    print('Issue creating export CSV file.')
+    raise KeyboardInterrupt
     
-# End of script
