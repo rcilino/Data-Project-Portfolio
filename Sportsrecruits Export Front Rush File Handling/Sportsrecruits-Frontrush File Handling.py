@@ -4,6 +4,10 @@ version 1.2.0
 Created by Robert Cilino
 May 2026
 
+version 1.2.1
+- Formatting Phone columns as "xxx.xxx.xxxx"
+- Removing utf-8 accent characters from Name fields
+
 version 1.2.0
 - A 2nd Front Rush upload file to add Parent/Guardians into the Contacts section of Front Rush is now created upon completion.
 - Reorganized export field column delete/rename section to combine dataframes in list before manipulating.
@@ -32,9 +36,12 @@ from pathlib import Path
 import fnmatch
 import csv
 import pandas as pd
-import logging
+import logging # Not using logging at this time for personal use
 from datetime import datetime
 import gc
+import unicodedata
+#import dataprep # Anaconda not installing dataprep properly
+
 
 # List imported modules
 modulenames = set(sys.modules) & set(globals())
@@ -65,7 +72,7 @@ try:
     print('df_parentcontacts cleared')
 except NameError:
     print('No dataframe "df_parentcontacts" exists, moving on.')
-
+ 
 try:
     del df_parentnamesdata # Delete dataframe
     cg.collect() # Memory garbage collection
@@ -87,9 +94,6 @@ else:
      
 # Create list "dataframes", if exists clears list "dataframes"
 dataframes = []
-
-# Create empty dataframe to be filled as each row is edited in the dataframes 'df' that are in the list 'dataframes'
-df_combined = pd.DataFrame()
 
 # Gather list of CSVs from directory and load CSV data into dataframes df
 try:
@@ -117,12 +121,21 @@ except:
 #print(df.attrs)
 #print(df.info())
 
+# Create empty dataframe to be filled as each row is edited in the dataframes 'df' that are in the list 'dataframes'
+df_combined = pd.DataFrame()
+
 # Combine data from the dataframes in the list
 for df in dataframes:
     # Add all rows in dataframes in List "dataframes" to df_combined which does not exist in a list
     df_combined = pd.concat([df_combined, df], ignore_index=True)
 
 ##### Manipulate export columns to match Front Rush expectations
+# Remove characters from name fields
+df_combined['First Name'] = df_combined['First Name'].str.normalize('NFKD').str.encode('ascii',errors='ignore').str.decode('utf-8')
+df_combined['Last Name'] = df_combined['Last Name'].str.normalize('NFKD').str.encode('ascii',errors='ignore').str.decode('utf-8')
+df_combined['Guardian First Name'] = df_combined['Guardian First Name'].str.normalize('NFKD').str.encode('ascii',errors='ignore').str.decode('utf-8')
+df_combined['Guardian First Name'] = df_combined['Guardian Last Name'].str.normalize('NFKD').str.encode('ascii',errors='ignore').str.decode('utf-8')
+
 # Remove rows from past years. 
 df_combined = df_combined[df_combined['Class Year'] >= int(datetime.now().year)]
 # It doesn't handle current year but we can delete those at a later date.
@@ -130,15 +143,15 @@ df_combined = df_combined[df_combined['Class Year'] >= int(datetime.now().year)]
 # Front Rush imports match for duplicate entries, this is based on name and contact information, so if any of that changed a duplicate record will be created.
 # If that has not changed then the file upload to Front Rush will update those records.
 
-# Convert Phone to string to preserve nulls and reformat later, removing leading +1 if it contains it
-df_combined['Phone'] = df_combined['Phone'].astype("string")
+# Convert Phone number, removing leading +1 if it contains it, formatting as "xxx.xxx.xxxx"
+df_combined['Phone'] = df_combined['Phone'].astype("string") # Convert to String
+df_combined['Phone'] = df_combined['Phone'].str.replace(r'1(.{11,})', r'\1', regex=True) # shorten and remove leading +1 from phone numbers if exist,
+df_combined['Phone'] = df_combined['Phone'].str[:3] + "." + df_combined['Phone'].str[3:6] + "." + df_combined['Phone'].str[6:10] # Format as "xxx.xxx.xxxx"
 
 # Concatenate Guardian Name fields, rename to Guardian Name, delete Guardian Last Name
 df_combined['Guardian First Name'] = df_combined['Guardian First Name'] + ' ' + df_combined['Guardian Last Name']
 df_combined.rename({'Guardian First Name': 'Guardian Name'}, axis=1, inplace=True)
 
-# Format Phone columns, shorten and remove leading +1 from phone numbers if exist
-df_combined['Phone'] = df_combined['Phone'].str.replace(r'1(.{11,})', r'\1', regex=True)
 # Copy Phone, rename both columns for Cell Phone Number and Contact Number
 df_combined['Contact Number :: General'] = df_combined['Phone']
 df_combined.rename({'Phone': 'Cell Phone Number :: General'}, axis=1, inplace=True)
@@ -152,12 +165,11 @@ df_combined['Weight'] = df_combined['Weight'].str.replace(' lbs', '')
 df_combined.rename({'Weight': 'Weight :: Athletic'}, axis=1, inplace=True)
 
 # Reformat Height values and rename
-def fmt(m):
-    f = int(m.group(1))
-    i = int(m.group(2))
+def fmt_ht(h):
+    f = int(h.group(1))
+    i = int(h.group(2))
     return f'{f} Feet {i:02} Inches'
-
-df_combined['Height'] = df_combined['Height'].str.replace(r'(\d+)\'(\d+)"', fmt, regex=True)
+df_combined['Height'] = df_combined['Height'].str.replace(r'(\d+)\'(\d+)"', fmt_ht, regex=True)
 df_combined.rename({'Height': 'Height :: Athletic'}, axis=1, inplace=True)
 
 # Delete unused column names
@@ -199,7 +211,7 @@ df_combined.rename({'State': 'State :: General'}, axis=1, inplace=True)
 df_combined.rename({'Country': 'Country :: General'}, axis=1, inplace=True)
 df_combined.rename({'Source': '3rd Party Source :: General'}, axis=1, inplace=True)
 
-
+##### Manipulate export columns for Contact file (Recruit Parents)
 # Create new dataframe to create Parent information for upload into Contacts
 df_parentcontacts = df_combined.copy(deep=True)
 # Start manipulating parent contact columns
@@ -268,11 +280,11 @@ try:
         # find files in folder
             for filename in os.listdir(processing_source_path):
                 source_path = os.path.join(processing_source_path, filename)
-                dest_path = os.path.join(processed_dest_path, 'processed-'+filename) # Adds "processed" to name for files to be moved
+                #dest_path = os.path.join(processed_dest_path, 'processed-'+filename) # Adds "processed" to name for files to be moved
                 if filename.endswith(".csv"):
                     try:
                         # Move file
-                        os.rename(source_path, dest_path)
+                        #os.rename(source_path, dest_path) # COMMENT to test without moving processed files
                         os.newline()
                         print('Processed Sportsrecruits files moved to /For Processing-Sportsrecruits Exports/Completed Exports.')
                     except: 
