@@ -1,12 +1,26 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
 """
 Sportsrecruits-Front Rush File Handling.py
-version 1.2.0
+version 1.2.2
 Created by Robert Cilino
 May 2026
 
+Be good, do good, go Bills.
+Be well, do well.
+
+Changelist:
+version 1.2.2
+- Clean input and match Sportsrecruits expectations imported dictionary of ISO3166 country codes/names.
+- Remove State field value if country is not 'United States' or 'Canada', matching Sportsrecruits expectations.
+
 version 1.2.1
-- Formatting Phone columns as "xxx.xxx.xxxx"
-- Removing utf-8 accent characters from Name fields
+- Formatting Phone columns as "xxx.xxx.xxxx".
+- Removing utf-8 accent characters from Name fields.
 
 version 1.2.0
 - A 2nd Front Rush upload file to add Parent/Guardians into the Contacts section of Front Rush is now created upon completion.
@@ -24,62 +38,120 @@ version 1.1.0
 - Processed files are now moved to /For Processing-Sportsrecruits Export/Completed Processing
 
 Future updates:
-- Using a csv to create a dictionary for the dataframes to make column name changes instead of hard-coding each column change.
+- Create a dictionary for column name changes instead of hard-coding each.
 - Add new columns if Sportsrecruits includes more in the future.
+    - Parent/Guardian 2 Name
+    - Parent/Guardian 2 Email Address
+    - Parent/Guardian 2 Phone Number
+    - Club Team Name
+    - Club Coach Name
+    - Club Coach Email
+    - Club Coach Phone
+    - High School Team Name
+    - High School Coach Name
+    - High School Coach Email
+    - High School Coach Phone
 
-Be well, do well.
 """
 
 import sys
 import os as os
-from pathlib import Path
+import pathlib
 import fnmatch
 import csv
 import pandas as pd
-import logging # Not using logging at this time for personal use
 from datetime import datetime
 import gc
 import unicodedata
-#import dataprep # Anaconda not installing dataprep properly
-
+import requests
+import numpy as np
 
 # List imported modules
 modulenames = set(sys.modules) & set(globals())
 allmodules = [sys.modules[name] for name in modulenames]
 print(f'Modules imported: {modulenames}')
 
-# Clear dataframe lists
+# Set dataframe display option to display "all" rows
+pd.set_option('display.max_rows', 1000)
+
+
+# In[2]:
+
+
+# Clear dataframe lists.
+# Can be used for testing, but clears all data from dataframes to not interfere with the upcoming run.
+try:
+    print('The current dataframes in memory are:')
+    get_ipython().run_line_magic('who', 'DataFrame')
+    print(f'\n')
+except:
+    print('%whos DataFrame did not execute properly')
+    
 try:
     dataframes.clear()
     print(dataframes)
-    gc.collect() # Memory garbage collection
     print('List "dataframes" cleared')
-#    logging.info('List "dataframes" cleared')
 except NameError: 
     print('No list "dataframes" exists, moving on.')
-#    logging.info('No list "dataframes" exists')
 
 try:
     del df_combined # Delete dataframe
-    cg.collect() # Memory garbage collection
-    print('df_combined cleared')
+    print('df_combined dataframe cleared')
 except NameError:
     print('No dataframe "df_combined" exists, moving on.')
 
 try:
     del df_parentcontacts # Delete dataframe
-    cg.collect() # Memory garbage collection
-    print('df_parentcontacts cleared')
+    print('df_parentcontacts dataframe cleared')
 except NameError:
     print('No dataframe "df_parentcontacts" exists, moving on.')
  
 try:
     del df_parentnamesdata # Delete dataframe
-    cg.collect() # Memory garbage collection
-    print('df_parentnamesdata cleared')
+    print('df_parentnamesdata dataframe cleared')
 except NameError:
     print('No dataframe "df_parentnamesdata" exists, moving on.')
-    
+
+try:
+    del dict_countries # Delete dictionary
+    print('dict_countries dictionary cleared')
+except NameError:
+    print('No dictionary "dict_countries" exists, moving on.')
+
+try:
+    gc.collect() # Memory garbage collection
+    print('gc.collect() ran successfully, garbage collected')
+except:
+    print('Issue running gc.collect()')
+
+
+# In[3]:
+
+
+# Create dictionary of Country Codes and Full Names
+# Credit arturictus/carlopires/ISO-3166-Countries-with-Regional-Codes
+url_ISO3166_country_csv = "https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/refs/heads/master/slim-2/slim-2.csv"
+#print(url_ISO3166_country_csv.text)
+
+# Create dictionary
+dict_countries = pd.read_csv(url_ISO3166_country_csv, keep_default_na=False, na_values=['_'], usecols=range(2), index_col=1, skiprows=0).T.to_dict('records')[0]
+
+
+# In[4]:
+
+
+# Use for testing
+# List files in directory
+#print('Our subdirectories are:')
+#p = Path('./')
+#for subdir in p.iterdir():
+#    if subdir.is_dir():
+#        print(subdir)
+
+
+# In[5]:
+
+
 # Specify where files from Sportsrecruits will live for processing
 processing_source_path = r'For Processing-Sportsrecruits Exports/'
 processed_dest_path = r'For Processing-Sportsrecruits Exports/Completed Processing/'
@@ -91,7 +163,11 @@ if len(os.listdir(processing_source_path)) > 1:
         print(file_path.name)
 else:
      print('No Sportsrecruits export files were found.')
-     
+
+
+# In[6]:
+
+
 # Create list "dataframes", if exists clears list "dataframes"
 dataframes = []
 
@@ -121,13 +197,43 @@ except:
 #print(df.attrs)
 #print(df.info())
 
+
+# In[7]:
+
+
 # Create empty dataframe to be filled as each row is edited in the dataframes 'df' that are in the list 'dataframes'
 df_combined = pd.DataFrame()
 
 # Combine data from the dataframes in the list
-for df in dataframes:
-    # Add all rows in dataframes in List "dataframes" to df_combined which does not exist in a list
-    df_combined = pd.concat([df_combined, df], ignore_index=True)
+try:
+    for df in dataframes:
+        # Add all rows in dataframes in List "dataframes" to df_combined which does not exist in a list
+        df_combined = pd.concat([df_combined, df], ignore_index=True)
+    print('CSVs loaded into [df] now loaded into df_combined')
+except:
+    print('Issue loading CSVs loaded into [df] into df_combined')
+    raise KeyboardInterrupt
+
+
+# In[8]:
+
+
+## Replace 'Country' 2-digit codes to full name
+# Create replace function - searches dictionary and returns country name
+def country_alpha2_to_name(x,my_dict):
+    if x in my_dict.keys():
+        return my_dict[x]
+    else:
+        return x #Assuming that you won't change the value if not in the dict
+        
+df_combined['Country'] = df_combined['Country'].apply(lambda x: country_alpha2_to_name(x,dict_countries)) # Use replace function
+df_combined['Country'] = df_combined['Country'].str.replace('United States of America','United States') # Fit Sportsrecruits expected name for 'United States'
+df_combined['Country'] = np.where(df_combined['Country'].isna() & df_combined['State'].notnull(), 'United States', df_combined['Country']) # Insert 'United States' when State is filled in but Country is null, otherwise just leave the value from ['Country']
+df_combined['State'] = np.where(np.logical_or(df_combined['Country']=='United States',df_combined['Country']=='Canada',df_combined['Country'].notnull()), df_combined['State'], np.nan) # Insert null/nan in State when Country is not United States or Canada
+
+
+# In[9]:
+
 
 ##### Manipulate export columns to match Front Rush expectations
 # Remove characters from name fields
@@ -175,7 +281,6 @@ df_combined.rename({'Height': 'Height :: Athletic'}, axis=1, inplace=True)
 # Delete unused column names
 df_combined.drop(columns=['Guardian Last Name'], axis=1, inplace =True)
 df_combined.drop(columns=['University Committed to'], axis=1, inplace =True)
-df_combined.drop(columns=['Position'], axis=1, inplace =True)
 df_combined.drop(columns=['GPA Unrestricted'], axis=1, inplace =True)
 df_combined.drop(columns=['GPA Scale'], axis=1, inplace =True)
 df_combined.drop(columns=['Program Notes'], axis=1, inplace =True)
@@ -209,7 +314,8 @@ df_combined.rename({'Intended Major': 'Intended Major :: Academic'}, axis=1, inp
 df_combined.rename({'City': 'City :: General'}, axis=1, inplace=True)
 df_combined.rename({'State': 'State :: General'}, axis=1, inplace=True)
 df_combined.rename({'Country': 'Country :: General'}, axis=1, inplace=True)
-df_combined.rename({'Source': '3rd Party Source :: General'}, axis=1, inplace=True)
+df_combined.rename({'Source': 'Source :: General'}, axis=1, inplace=True)
+df_combined.rename({'Position': 'Position :: Athletic'}, axis=1, inplace=True)
 
 ##### Manipulate export columns for Contact file (Recruit Parents)
 # Create new dataframe to create Parent information for upload into Contacts
@@ -251,10 +357,15 @@ df_parentcontacts.drop(columns=['Height :: Athletic'], axis=1, inplace=True)
 df_parentcontacts.drop(columns=['Weight :: Athletic'], axis=1, inplace=True)
 df_parentcontacts.drop(columns=['Country :: General'], axis=1, inplace=True)
 df_parentcontacts.drop(columns=['Entry Term :: General'], axis=1, inplace=True)
+df_parentcontacts.drop(columns=['Position :: Athletic'], axis=1, inplace=True)
 
 # Use for testing
 #df_combined.info()
 #display(df_combined)
+
+
+# In[10]:
+
 
 # Create file names for export files
 output_RecruitFile = str('Output-FrontRush Import Files/Front Rush Import-Recruit--' + Coach + '--' + datetime.now().strftime("%Y%m%d-%H.%M.%S") + '.csv')
@@ -284,7 +395,7 @@ try:
                 if filename.endswith(".csv"):
                     try:
                         # Move file
-                        #os.rename(source_path, dest_path) # COMMENT to test without moving processed files
+                        os.rename(source_path, dest_path) # COMMENT to test without moving processed files
                         os.newline()
                         print('Processed Sportsrecruits files moved to /For Processing-Sportsrecruits Exports/Completed Exports.')
                     except: 
@@ -299,4 +410,16 @@ try:
 except:
     print('\nIssue creating export CSV file.')
     raise KeyboardInterrupt
+
+try:
+    gc.collect() # Memory garbage collection
+    print('gc.collect() ran successfully, garbage collected')
+except:
+    print('Issue running gc.collect()')
+
+
+# In[ ]:
+
+
+
 
