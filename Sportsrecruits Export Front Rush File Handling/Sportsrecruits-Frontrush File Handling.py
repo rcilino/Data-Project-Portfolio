@@ -6,7 +6,7 @@
 
 """
 Sportsrecruits-Front Rush File Handling.py
-version 1.2.2
+version 1.2.3
 Created by Robert Cilino
 May 2026
 
@@ -14,6 +14,11 @@ Be good, do good, go Bills.
 Be well, do well.
 
 Changelist:
+
+version 1.2.3
+- Added Source :: General field to input "SportsRecruits"
+- Added Comment :: General field to input "SportsRecruits" which is used in the messaging "Add Recipients" section to easily filter based on source.
+
 version 1.2.2
 - Clean input and match Sportsrecruits expectations imported dictionary of ISO3166 country codes/names.
 - Remove State field value if country is not 'United States' or 'Canada', matching Sportsrecruits expectations.
@@ -293,6 +298,8 @@ df_combined['Last Name'] = df_combined['Last Name'].str.title()
 
 # Insert new columns
 df_combined.insert(23,'Student Type ::  General', 'First Year')
+df_combined.insert(24,['Comment :: General', df_combined['Source']) # Uses the exported 'Source' field as input for new field 'Comment'
+
 
 # Rename columns
 df_combined.rename({'First Name': 'Legal First Name :: General'}, axis=1, inplace=True)
