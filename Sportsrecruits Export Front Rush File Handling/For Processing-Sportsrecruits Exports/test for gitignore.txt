@@ -1,2 +1,0 @@
-testing gitignore keeping directories but ignoring files within directories
-test line 2
