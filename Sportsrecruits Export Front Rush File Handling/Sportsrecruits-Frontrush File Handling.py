@@ -19,6 +19,7 @@ May 22, 2026
 - Added a debug switch via variable and if statements, mainly used to stop renaming and moving source files.
 - Improved Gender field handling based on source file name using case-insensitive matching.
 - Improved file rename and move handling.
+- Coach variable created blank to forego file errors.
 
 version 1.2.3
 May 21, 2026
@@ -84,8 +85,8 @@ print('File conversion process beginning.')
 # Variable 'On' or 'Off' used in if statements for source file rename and source file move
 # When Debug is 'On' the if statements will not allow the source file rename or file move
 # This allows multiple runs without needing to comment/uncomment numerous lines, and without renaming and moving source files
-Debug = 'On'
-print(f'Debug status is: {Debug}')
+Debug = 'Off'
+print(f'Debug status is: {Debug}\n')
 
 
 # In[3]:
@@ -107,7 +108,7 @@ import numpy as np
 # List imported modules
 modulenames = set(sys.modules) & set(globals())
 allmodules = [sys.modules[name] for name in modulenames]
-print(f'Modules imported: {modulenames}')
+print(f'Modules imported: {modulenames}\n')
 
 # Set dataframe display option to display "all" rows
 pd.set_option('display.max_rows', 1000)
@@ -121,7 +122,7 @@ pd.set_option('display.max_rows', 1000)
 try:
     print('The current dataframes in memory are:')
     get_ipython().run_line_magic('who', 'DataFrame')
-    print(f'\n')
+    print()
 except:
     print('%whos DataFrame did not execute properly')
     
@@ -156,11 +157,12 @@ try:
 except NameError:
     print('No dictionary "dict_countries" exists, moving on.')
 
+print()
 try:
     gc.collect() # Memory garbage collection
     print('gc.collect() ran successfully, garbage collected')
 except:
-    print('Issue running gc.collect()')
+    print('Issue running gc.collect()\n')
 
 
 # In[5]:
@@ -174,9 +176,9 @@ url_ISO3166_country_csv = "https://raw.githubusercontent.com/lukes/ISO-3166-Coun
 # Create dictionary
 try:
     dict_countries = pd.read_csv(url_ISO3166_country_csv, keep_default_na=False, na_values=['_'], usecols=range(2), index_col=1, skiprows=0).T.to_dict('records')[0]
-    print('Dictionary "dict_countries" created')
+    print('Dictionary "dict_countries" created\n')
 except:
-    print('Issue creating Dictionary "dict_countries')
+    print('Issue creating Dictionary "dict_countries\n')
 
 
 # In[6]:
@@ -212,6 +214,9 @@ else:
 # Create list "dataframes", if exists clears list "dataframes"
 dataframes = []
 
+# Create variable for use in exported file name
+Coach = ''  
+
 # Gather list of CSVs from directory and load CSV data into dataframes df
 try:
     for filename in os.listdir(processing_source_path):
@@ -236,10 +241,15 @@ try:
                 Gender = 'NoGender' # Creates variable for us in exported file name if desired
             Coach = df['Followed By Coach'].iloc[0] # Create variable for use in exported file name
             dataframes.append(df) 
-    print('Files loaded successfully.')
+    print('\nFiles loaded successfully.\n')
 except:
-    print('Files not loaded successfully.')
+    print('\nFiles not loaded successfully.\n')
     raise KeyboardInterrupt
+
+if Coach == '':
+   print('No file loaded, Coach variable left blank.\n')
+else:
+    print(f'Coach variable filled with "{Coach}" from "Followed By Coach" column.\n')
 
 # Use for testing
 #print(df.attrs)
@@ -257,9 +267,9 @@ try:
     for df in dataframes:
         # Add all rows in dataframes in List "dataframes" to df_combined which does not exist in a list
         df_combined = pd.concat([df_combined, df], ignore_index=True)
-    print('CSVs loaded into [df] now loaded into df_combined')
+    print('CSVs loaded into [df] now loaded into df_combined\n')
 except:
-    print('Issue loading CSVs loaded into [df] into df_combined')
+    print('Issue loading CSVs loaded into [df] into df_combined\n')
     raise KeyboardInterrupt
 
 
@@ -279,9 +289,9 @@ try:
     df_combined['Country'] = df_combined['Country'].str.replace('United States of America','United States') # Fit Sportsrecruits expected name for 'United States'
     df_combined['Country'] = np.where(df_combined['Country'].isna() & df_combined['State'].notnull(), 'United States', df_combined['Country']) # Insert 'United States' when State is filled in but Country is null, otherwise just leave the value from ['Country']
     df_combined['State'] = np.where(np.logical_or(df_combined['Country']=='United States',df_combined['Country']=='Canada',df_combined['Country'].notnull()), df_combined['State'], np.nan) # Insert null/nan in State when Country is not United States or Canada
-    print('Handling for all Country and State fields completed')
+    print('Handling for all Country and State fields completed\n')
 except:
-    print('Issue running some of all Country and State field operations')
+    print('Issue running some of all Country and State field operations\n')
 
 
 # In[11]:
@@ -416,9 +426,9 @@ try:
     df_parentcontacts.drop(columns=['Position :: Athletic'], axis=1, inplace=True)
 
     # Print column manipulation success
-    print('All data field changes successful')
+    print('All data field changes successful\n')
 except:
-    print('Some of all data field changes unsuccessful')
+    print('Some of all data field changes unsuccessful\n')
     
 # Use for testing
 #df_combined.info()
