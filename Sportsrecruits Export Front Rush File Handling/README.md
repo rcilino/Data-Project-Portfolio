@@ -16,6 +16,7 @@ version 1.2.4 - May 22, 2026
 - Added a debug switch via variable and if statements, mainly used to stop renaming and moving source files.
 - Improved Gender field handling based on source file name using case-insensitive matching.
 - Improved file rename and move handling.
+- Coach variable created blank to forego file errors.
 
 version 1.2.3 - May 21, 2026
 - Added Source :: General field to input "SportsRecruits"
