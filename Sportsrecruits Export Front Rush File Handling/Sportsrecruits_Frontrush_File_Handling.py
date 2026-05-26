@@ -6,13 +6,17 @@
 
 """
 Sportsrecruits-Front Rush File Handling.py
-version 1.2.4
+version 1.2.5
 Created by Robert Cilino
 
 Be good, do good, go Bills.
 Be well, do well.
 
 Changelog:
+version 1.2.5
+May 26, 2026
+- Changed file path handling to use os.getcwd() to handle running the .py file portably from the unzipped file in the repository.
+
 version 1.2.4
 May 22, 2026
 - Added better handling for culling past students to include current month and year compared to Class Year.
@@ -75,7 +79,7 @@ Future updates:
 
 """
 
-print('File conversion process beginning.')
+print('File opened - importing packages, clearing lists and dataframes.')
 
 
 # In[2]:
@@ -87,6 +91,8 @@ print('File conversion process beginning.')
 # This allows multiple runs without needing to comment/uncomment numerous lines, and without renaming and moving source files
 Debug = 'Off'
 print(f'Debug status is: {Debug}\n')
+
+# Debug switch will stay on in the .ipnyb for writing but switched off for .py exports.
 
 
 # In[3]:
@@ -196,8 +202,13 @@ except:
 # In[7]:
 
 
-# Specify where files from Sportsrecruits will live for processing
-processing_source_path = r'For Processing-Sportsrecruits Exports/'
+# Specify where files from Sportsrecruits will live for processing and be moved after processing, and export files will be generated.
+dir_home_path = os.getcwd()
+processing_source_path = dir_home_path + "/{}".format('For Processing-Sportsrecruits Exports')
+# Specify destination path for processed files
+processed_dest_path = dir_home_path + "/{}".format('For Processing-Sportsrecruits Exports/Completed Processing')
+# Specify destination path for exported files
+export_dest_path = dir_home_path + "/{}".format('Output-FrontRush Import Files')
 
 # List files in directory. listdir counts subdirectories as well, that's why the test is > 1
 if len(os.listdir(processing_source_path)) > 1:
@@ -216,6 +227,9 @@ dataframes = []
 
 # Create variable for use in exported file name
 Coach = ''  
+
+# Print status update for user.
+print('File conversion process beginning.')
 
 # Gather list of CSVs from directory and load CSV data into dataframes df
 try:
@@ -438,12 +452,9 @@ except:
 # In[12]:
 
 
-# Specify destination path for processed files
-processed_dest_path = r'For Processing-Sportsrecruits Exports/Completed Processing/'
-
 # Create file names for export files
-output_RecruitFile = str('Output-FrontRush Import Files/Front Rush Import-Recruit--' + Coach + '--' + datetime.now().strftime("%Y%m%d-%H.%M.%S") + '.csv')
-output_ParentContactFile = str('Output-FrontRush Import Files/Front Rush Import-ParentContact--' + Coach + '--' + datetime.now().strftime("%Y%m%d-%H.%M.%S") + '.csv')
+output_RecruitFile = str(export_dest_path + '/Front Rush Import-Recruit--' + Coach + '--' + datetime.now().strftime("%Y%m%d-%H.%M.%S") + '.csv')
+output_ParentContactFile = str(export_dest_path + '/Front Rush Import-ParentContact--' + Coach + '--' + datetime.now().strftime("%Y%m%d-%H.%M.%S") + '.csv')
 
 # Export parent file to Output folder
 try:
