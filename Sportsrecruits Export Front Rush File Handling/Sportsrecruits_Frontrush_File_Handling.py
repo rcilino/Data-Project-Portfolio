@@ -1,9 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 # In[1]:
-
-
 """
 Sportsrecruits-Front Rush File Handling.py
 version 1.2.5
@@ -16,6 +11,8 @@ Changelog:
 version 1.2.5
 May 26, 2026
 - Changed file path handling to use os.getcwd() to handle running the .py file portably from the unzipped file in the repository.
+- Removed unused dependencies.
+- Converted development from Jupyter to Spyder.
 
 version 1.2.4
 May 22, 2026
@@ -65,10 +62,10 @@ Future updates:
 - Create a dictionary for column name changes instead of hard-coding each.
 - Add new columns if Sportsrecruits includes more in the future.
     - Athlete Sex/Gender
+    - Parent Guardian 1 Phone Number
     - Parent/Guardian 2 Name
     - Parent/Guardian 2 Email Address
     - Parent/Guardian 2 Phone Number
-    - Club Team Name
     - Club Coach Name
     - Club Coach Email
     - Club Coach Phone
@@ -76,14 +73,12 @@ Future updates:
     - High School Coach Name
     - High School Coach Email
     - High School Coach Phone
+    - Social Media Links
 
 """
 
 print('File opened - importing packages, clearing lists and dataframes.')
-
-
 # In[2]:
-
 
 ##### Debug switch
 # Variable 'On' or 'Off' used in if statements for source file rename and source file move
@@ -94,21 +89,15 @@ print(f'Debug status is: {Debug}\n')
 
 # Debug switch will stay on in the .ipnyb for writing but switched off for .py exports.
 
-
 # In[3]:
-
-
+    
 # Import required modules
 import sys
 import os as os
-import pathlib
 import fnmatch
-import csv
 import pandas as pd
 from datetime import datetime
 import gc
-import unicodedata
-import requests
 import numpy as np
 
 # List imported modules
@@ -119,9 +108,7 @@ print(f'Modules imported: {modulenames}\n')
 # Set dataframe display option to display "all" rows
 pd.set_option('display.max_rows', 1000)
 
-
 # In[4]:
-
 
 # Clear dataframe lists.
 # Can be used for testing, but clears all data from dataframes to not interfere with the upcoming run.
@@ -138,6 +125,12 @@ try:
     print('List "dataframes" cleared')
 except NameError: 
     print('No list "dataframes" exists, moving on.')
+
+try:
+    del dfd # Delete dataframe
+    print('df dataframe cleared')
+except NameError:
+    print('No dataframe "df" exists, moving on.')
 
 try:
     del df_combined # Delete dataframe
@@ -170,9 +163,7 @@ try:
 except:
     print('Issue running gc.collect()\n')
 
-
 # In[5]:
-
 
 # Create dictionary of Country Codes and Full Names
 # Credit arturictus/carlopires/ISO-3166-Countries-with-Regional-Codes
@@ -186,9 +177,7 @@ try:
 except:
     print('Issue creating Dictionary "dict_countries\n')
 
-
 # In[6]:
-
 
 # Use for testing
 # List files in directory
@@ -198,9 +187,7 @@ except:
 #    if subdir.is_dir():
 #        print(subdir)
 
-
 # In[7]:
-
 
 # Specify where files from Sportsrecruits will live for processing and be moved after processing, and export files will be generated.
 dir_home_path = os.getcwd()
@@ -218,9 +205,7 @@ if len(os.listdir(processing_source_path)) > 1:
 else:
      print('No Sportsrecruits export files were found.')
 
-
 # In[8]:
-
 
 # Create list "dataframes", if exists clears list "dataframes"
 dataframes = []
@@ -269,9 +254,7 @@ else:
 #print(df.attrs)
 #print(df.info())
 
-
 # In[9]:
-
 
 # Create empty dataframe to be filled as each row is edited in the dataframes 'df' that are in the list 'dataframes'
 df_combined = pd.DataFrame()
@@ -286,9 +269,7 @@ except:
     print('Issue loading CSVs loaded into [df] into df_combined\n')
     raise KeyboardInterrupt
 
-
 # In[10]:
-
 
 ## Replace 'Country' 2-digit codes to full name
 # Create replace function - searches dictionary and returns country name
@@ -307,9 +288,7 @@ try:
 except:
     print('Issue running some of all Country and State field operations\n')
 
-
 # In[11]:
-
 
 ##### Manipulate export columns to match Front Rush expectations
 try:
@@ -396,10 +375,19 @@ try:
     df_combined.rename({'Country': 'Country :: General'}, axis=1, inplace=True)
     df_combined.rename({'Source': 'Source :: General'}, axis=1, inplace=True)
     df_combined.rename({'Position': 'Position :: Athletic'}, axis=1, inplace=True)
+
+    # Print column manipulation success
+    print('All recruit data field changes successful\n')
+except:
+    print('Some or none of all recruit data field changes unsuccessful\n')
+
     
-    ##### Manipulate export columns for Contact file (Recruit Parents)
-    # Create new dataframe to create Parent information for upload into Contacts
-    df_parentcontacts = df_combined.copy(deep=True)
+##### Manipulate export columns for Contact file (Recruit Parents)
+# Create new dataframe to create Parent information for upload into Contacts
+df_parentcontacts = pd.DataFrame()
+df_parentcontacts = df_combined.copy(deep=True)
+    
+try:
     # Start manipulating parent contact columns
     df_parentcontacts['Child First Name :: General'] = df_parentcontacts['Legal First Name :: General']
     df_parentcontacts['Child Last Name :: General'] = df_parentcontacts['Last Name :: General']
@@ -438,19 +426,17 @@ try:
     df_parentcontacts.drop(columns=['Country :: General'], axis=1, inplace=True)
     df_parentcontacts.drop(columns=['Entry Term :: General'], axis=1, inplace=True)
     df_parentcontacts.drop(columns=['Position :: Athletic'], axis=1, inplace=True)
-
+    
     # Print column manipulation success
-    print('All data field changes successful\n')
+    print('All parent data field changes successful\n')
 except:
-    print('Some of all data field changes unsuccessful\n')
+    print('Some or none of all parent data field changes unsuccessful\n')
     
 # Use for testing
 #df_combined.info()
 #display(df_combined)
 
-
 # In[12]:
-
 
 # Create file names for export files
 output_RecruitFile = str(export_dest_path + '/Front Rush Import-Recruit--' + Coach + '--' + datetime.now().strftime("%Y%m%d-%H.%M.%S") + '.csv')
@@ -504,10 +490,3 @@ try:
     print('gc.collect() ran successfully, garbage collected')
 except:
     print('Issue running gc.collect()')
-
-
-# In[ ]:
-
-
-
-
