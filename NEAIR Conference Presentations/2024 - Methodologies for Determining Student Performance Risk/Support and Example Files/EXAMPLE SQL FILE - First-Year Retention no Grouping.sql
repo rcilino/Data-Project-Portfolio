@@ -1,3 +1,5 @@
+-- Using Ellucian Colleague and its standard DataOrchestrator ETL and ODS --
+
 SELECT
 CensusTerm
 --,[Program ID]
@@ -45,10 +47,9 @@ FROM (
 							  ,a.[IPEDS Desc]
 							  ,a.[Term Status]
 						  FROM [database].[dbo].[combined_census_file_table] a
-						  --LEFT JOIN K10_ACAD_PROGRAMS p ON a.[Program ID] = p.ACAD_PROGRAMS_ID
 						  LEFT JOIN (select distinct [Student ID], CensusTerm, CensusYear FROM combined_census_file_table where CensusTerm like 'FA%') ret1 
 									on a.[Student ID]+'*'+cast(left(a.CensusYear,4)+1 as varchar) = ret1.[Student ID]+'*'+cast(left(ret1.CensusYear,4) as varchar)
-						  LEFT JOIN ODS_ACAD_CREDENTIALS cred on a.[Student ID] = cred.ACAD_PERSON_ID and cred.ACAD_INSTITUTIONS_ID = 'xxxxxx' and cred.ACAD_ACAD_LEVEL = 'UG'
+						  LEFT JOIN Conferred_Degrees cred on a.[Student ID] = cred.ACAD_PERSON_ID and cred.ACAD_INSTITUTIONS_ID = 'xxxxxx' and cred.ACAD_ACAD_LEVEL = 'UG'
 											 and ((Year(cred.ACAD_DEGREE_DATE) = cast(left(a.CensusYear,4)+1 as varchar) and Month(cred.ACAD_DEGREE_DATE) <=8)
 												  or (Year(cred.ACAD_DEGREE_DATE) = cast(left(a.CensusYear,4) as varchar) and Month(cred.ACAD_DEGREE_DATE) between 9 and 12)
 												 )

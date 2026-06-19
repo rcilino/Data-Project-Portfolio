@@ -1,3 +1,5 @@
+-- Using Ellucian Colleague and its standard DataOrchestrator ETL and ODS --
+
 With FG_CTE AS
 (SELECT *
 
@@ -103,7 +105,7 @@ FROM (
 								and a.CensusTerm = a.[Admit Term]
 								and a.[Admit Status] like '%Freshman%'
 								and a.[Admit Status] not like 'Re-Admit'
-								and a.[Program ID] != 'NONMATRIC.UG'
+								and a.[Program ID] != 'NONMATRICULATED'
 				) RET
 		) RETENTION
 		group by CensusTerm, [PELL+First-Gen]
